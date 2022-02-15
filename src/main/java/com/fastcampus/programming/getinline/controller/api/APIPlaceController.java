@@ -1,5 +1,8 @@
 package com.fastcampus.programming.getinline.controller.api;
 
+import com.fastcampus.programming.getinline.constant.PlaceType;
+import com.fastcampus.programming.getinline.dto.APIDataResponse;
+import com.fastcampus.programming.getinline.dto.PlaceDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,8 +12,18 @@ import java.util.List;
 public class APIPlaceController {
 
     @GetMapping("/places")
-    public List<String> getPlaces() {
-        return List.of("place1", "place2");
+    public APIDataResponse<List<PlaceDto>> getPlaces() {
+        return APIDataResponse.of(List.of(
+                        PlaceDto.of(
+                                PlaceType.COMMON,
+                                "테스트",
+                                "테스트시 테스트구",
+                                "010-1234-5678",
+                                30,
+                                "신장개업"
+                        )
+                )
+        );
     }
 
     @PostMapping("/places")
@@ -19,10 +32,24 @@ public class APIPlaceController {
     }
 
     @GetMapping("/places/{placeId}")
-    public String getPlace(
+    public APIDataResponse<PlaceDto> getPlace(
             @PathVariable Integer placeId
     ) {
-        return "place" + placeId;
+        if (placeId.equals(2)) {  // 임시
+            return APIDataResponse.of(null);
+        }
+
+        return APIDataResponse.of(
+                PlaceDto.of(
+                        PlaceType.COMMON,
+                        "테스트",
+                        "테스트시 테스트구",
+                        "010-1234-5678",
+                        30,
+                        "신장개업"
+                )
+
+        );
     }
 
     @PutMapping("/places/{placeId}")
