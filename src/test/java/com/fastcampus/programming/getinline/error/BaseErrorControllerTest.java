@@ -1,5 +1,6 @@
 package com.fastcampus.programming.getinline.error;
 
+import com.fastcampus.programming.getinline.controller.error.BaseErrorController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

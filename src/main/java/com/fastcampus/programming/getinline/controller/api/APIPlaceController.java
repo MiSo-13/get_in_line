@@ -3,6 +3,9 @@ package com.fastcampus.programming.getinline.controller.api;
 import com.fastcampus.programming.getinline.constant.PlaceType;
 import com.fastcampus.programming.getinline.dto.APIDataResponse;
 import com.fastcampus.programming.getinline.dto.PlaceDto;
+import com.fastcampus.programming.getinline.dto.PlaceRequest;
+import com.fastcampus.programming.getinline.dto.PlaceResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,57 +15,55 @@ import java.util.List;
 public class APIPlaceController {
 
     @GetMapping("/places")
-    public APIDataResponse<List<PlaceDto>> getPlaces() {
-        return APIDataResponse.of(List.of(
-                        PlaceDto.of(
-                                PlaceType.COMMON,
-                                "테스트",
-                                "테스트시 테스트구",
-                                "010-1234-5678",
-                                30,
-                                "신장개업"
-                        )
-                )
-        );
+    public APIDataResponse<List<PlaceResponse>> getPlaces() {
+        return APIDataResponse.of(List.of(PlaceResponse.of(
+                PlaceType.COMMON,
+                "랄라배드민턴장",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30,
+                "신장개업"
+        )));
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/places")
-    public Boolean createPlace() {
-        return true;
+    public APIDataResponse<Void> createPlace(
+            @RequestBody PlaceRequest placeRequest
+    ) {
+        return APIDataResponse.empty();
     }
 
     @GetMapping("/places/{placeId}")
-    public APIDataResponse<PlaceDto> getPlace(
-            @PathVariable Integer placeId
+    public APIDataResponse<PlaceResponse> getPlace(
+            @PathVariable Long placeId
     ) {
-        if (placeId.equals(2)) {  // 임시
-            return APIDataResponse.of(null);
+        if (placeId.equals(2L)) {  // 임시
+            return APIDataResponse.empty();
         }
 
-        return APIDataResponse.of(
-                PlaceDto.of(
-                        PlaceType.COMMON,
-                        "테스트",
-                        "테스트시 테스트구",
-                        "010-1234-5678",
-                        30,
-                        "신장개업"
-                )
-
-        );
+        return APIDataResponse.of(PlaceResponse.of(
+                PlaceType.COMMON,
+                "랄라배드민턴장",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30,
+                "신장개업"
+        ));
     }
 
     @PutMapping("/places/{placeId}")
-    public Boolean modifyPlace(
-            @PathVariable Integer placeId
+    public APIDataResponse<Void> modifyPlace(
+            @PathVariable Long placeId,
+            @RequestBody PlaceRequest placeRequest
     ) {
-        return true;
+        return APIDataResponse.empty();
     }
 
     @DeleteMapping("/places/{placeId}")
-    public Boolean removePlace(
-            @PathVariable Integer placeId
+    public APIDataResponse<Void> removePlace(
+            @PathVariable Long placeId
     ) {
-        return true;
+        return APIDataResponse.empty();
     }
 }

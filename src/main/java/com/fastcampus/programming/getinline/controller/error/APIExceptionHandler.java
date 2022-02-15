@@ -1,4 +1,4 @@
-package com.fastcampus.programming.getinline.error;
+package com.fastcampus.programming.getinline.controller.error;
 
 import com.fastcampus.programming.getinline.constant.ErrorCode;
 import com.fastcampus.programming.getinline.dto.APIErrorResponse;
