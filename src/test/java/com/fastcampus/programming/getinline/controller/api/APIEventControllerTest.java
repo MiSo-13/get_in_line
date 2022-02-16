@@ -3,6 +3,7 @@ package com.fastcampus.programming.getinline.controller.api;
 import com.fastcampus.programming.getinline.constant.ErrorCode;
 import com.fastcampus.programming.getinline.constant.EventStatus;
 import com.fastcampus.programming.getinline.dto.EventDto;
+import com.fastcampus.programming.getinline.dto.EventRequest;
 import com.fastcampus.programming.getinline.dto.EventResponse;
 import com.fastcampus.programming.getinline.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -151,7 +153,7 @@ class APIEventControllerTest {
     @Test
     void givenWrongEvent_whenCreatingAnEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given
-        EventResponse eventResponse = EventResponse.of(
+        EventRequest eventRequest = EventRequest.of(
                 -1L,
                 "  ",
                 null,
@@ -166,13 +168,14 @@ class APIEventControllerTest {
         mvc.perform(
                         post("/api/events")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(eventResponse))
+                                .content(mapper.writeValueAsString(eventRequest))
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.SPRING_BAD_REQUEST.getCode()))
-                .andExpect(jsonPath("$.message").value(containsString(ErrorCode.SPRING_BAD_REQUEST.getMessage())));
+                .andExpect(jsonPath("$.message").value(containsString(ErrorCode.SPRING_BAD_REQUEST.getMessage())))
+                .andDo(print());
 
         then(eventService).shouldHaveNoInteractions();
     }
