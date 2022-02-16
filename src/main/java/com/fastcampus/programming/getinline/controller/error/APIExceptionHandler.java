@@ -20,22 +20,15 @@ import javax.validation.ConstraintViolationException;
 public class APIExceptionHandler  extends ResponseEntityExceptionHandler {
     // ResponseEntityExceptionHandler << spring 에서 정한 error 처리
     @ExceptionHandler  // GeneralException 발생에 경우
-    public ResponseEntity<Object> general(
+    public ResponseEntity<Object> validation(
             ConstraintViolationException e,
             WebRequest request
     ) {
-        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        return super.handleExceptionInternal(
+        return getInternalResponseEntity(
                 e,
-                APIErrorResponse.of(
-                        false,
-                        errorCode.getCode(),
-                        errorCode.getMessage(e)
-                ),
+                ErrorCode.VALIDATION_ERROR,
                 HttpHeaders.EMPTY,
-                status,
+                HttpStatus.BAD_REQUEST,
                 request
         );
     }
@@ -54,17 +47,7 @@ public class APIExceptionHandler  extends ResponseEntityExceptionHandler {
 //                .body(APIErrorResponse.of(
 //                        false, errorCode, errorCode.getMessage(e)
 //                ));
-        return super.handleExceptionInternal(
-                e,
-                APIErrorResponse.of(
-                        false,
-                        errorCode.getCode(),
-                        errorCode.getMessage(e)
-                ),
-                HttpHeaders.EMPTY,
-                status,
-                request
-        );
+        return getInternalResponseEntity(e, errorCode, HttpHeaders.EMPTY, status, request);
     }
 
     @ExceptionHandler  // GeneralException 발생에 경우
@@ -72,18 +55,10 @@ public class APIExceptionHandler  extends ResponseEntityExceptionHandler {
             Exception e,
             WebRequest request
     ) {
-        ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        return super.handleExceptionInternal(
-                e,
-                APIErrorResponse.of(
-                        false,
-                        errorCode.getCode(),
-                        errorCode.getMessage(e)
-                ),
+        return getInternalResponseEntity(e,
+                ErrorCode.INTERNAL_ERROR,
                 HttpHeaders.EMPTY,
-                status,
+                HttpStatus.INTERNAL_SERVER_ERROR,
                 request
         );
     }
@@ -100,12 +75,22 @@ public class APIExceptionHandler  extends ResponseEntityExceptionHandler {
         ErrorCode errorCode = status.is4xxClientError()
                 ? ErrorCode.SPRING_BAD_REQUEST : ErrorCode.SPRING_INTERNAL_ERROR;
 
+        return getInternalResponseEntity(ex, errorCode, headers, status, request);
+    }
+
+    private ResponseEntity<Object> getInternalResponseEntity(
+            Exception e,
+            ErrorCode errorCode,
+            HttpHeaders headers,
+            HttpStatus status,
+            WebRequest request
+    ) {
         return super.handleExceptionInternal(
-                ex,
+                e,
                 APIErrorResponse.of(
                         false,
                         errorCode.getCode(),
-                        errorCode.getMessage(ex)
+                        errorCode.getMessage(e)
                 ),
                 headers,
                 status,
