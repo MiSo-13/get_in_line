@@ -6,6 +6,7 @@ import com.fastcampus.programming.getinline.dto.EventRequest;
 import com.fastcampus.programming.getinline.dto.EventResponse;
 import com.fastcampus.programming.getinline.service.EventService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Validated
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -50,6 +52,7 @@ public class APIEventController {
     public APIDataResponse<String> createEvent(
             @Valid @RequestBody EventRequest eventRequest
     ) {
+        log.debug("보고 싶은 값 : {}", eventRequest);
         boolean result = eventService.createEvent(eventRequest.toDTO());
         return APIDataResponse.of(Boolean.toString(result));
     }
