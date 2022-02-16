@@ -6,16 +6,12 @@ import com.fastcampus.programming.getinline.exception.GeneralException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice(annotations = RestController.class)
 // API 에 대한 ControllerAdvice 를 만듦
@@ -23,6 +19,27 @@ import java.util.Map;
 // RestController 를 사용하는 것만 감지 (api)
 public class APIExceptionHandler  extends ResponseEntityExceptionHandler {
     // ResponseEntityExceptionHandler << spring 에서 정한 error 처리
+    @ExceptionHandler  // GeneralException 발생에 경우
+    public ResponseEntity<Object> general(
+            ConstraintViolationException e,
+            WebRequest request
+    ) {
+        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        return super.handleExceptionInternal(
+                e,
+                APIErrorResponse.of(
+                        false,
+                        errorCode.getCode(),
+                        errorCode.getMessage(e)
+                ),
+                HttpHeaders.EMPTY,
+                status,
+                request
+        );
+    }
+
     @ExceptionHandler  // GeneralException 발생에 경우
     public ResponseEntity<Object> general(
             GeneralException e,
