@@ -1,9 +1,6 @@
 package com.fastcampus.programming.getinline.dto;
 
 import com.fastcampus.programming.getinline.constant.PlaceType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 

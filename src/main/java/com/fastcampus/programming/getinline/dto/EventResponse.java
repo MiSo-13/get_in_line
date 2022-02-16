@@ -15,4 +15,18 @@ public class EventResponse {
     Integer currentNumberOfPeople;
     Integer capacity;
     String memo;
+
+    public static EventResponse from(EventDto eventDto) {
+        if (eventDto == null) {return null;}
+        return EventResponse.of(
+                eventDto.getPlaceId(),
+                eventDto.getEventName(),
+                eventDto.getEventStatus(),
+                eventDto.getEventStartDatetime(),
+                eventDto.getEventEndDatetime(),
+                eventDto.getCurrentNumberOfPeople(),
+                eventDto.getCapacity(),
+                eventDto.getMemo()
+        );
+    }
 }
