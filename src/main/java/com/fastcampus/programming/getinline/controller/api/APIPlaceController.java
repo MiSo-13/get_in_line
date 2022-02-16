@@ -2,7 +2,6 @@ package com.fastcampus.programming.getinline.controller.api;
 
 import com.fastcampus.programming.getinline.constant.PlaceType;
 import com.fastcampus.programming.getinline.dto.APIDataResponse;
-import com.fastcampus.programming.getinline.dto.PlaceDto;
 import com.fastcampus.programming.getinline.dto.PlaceRequest;
 import com.fastcampus.programming.getinline.dto.PlaceResponse;
 import org.springframework.http.HttpStatus;
